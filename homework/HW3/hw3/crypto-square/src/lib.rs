@@ -1,19 +1,40 @@
-#![allow(unused)]
+/// Copyright (c) 2018 Jason Graalum
+///
+///
 pub fn encrypt(input: &str) -> String {
+    if input.is_empty() {
+        return "".to_string();
+    }
+    let normalized: Vec<char> = input
+        .to_lowercase()
+        .chars()
+        .filter(|c| c.is_alphanumeric())
+        .map(|c| c)
+        .collect();
 
-    //let input = "adddbc def 1 HIJ asdfjasd";
-    let mut normalized : String = input.to_lowercase().chars().filter(|c| c >= &'a' && c <= &'z').map(|c| c).collect();
-    
-    let len = normalized.len();  
-    let sq = (normalized.len() as f64).sqrt().ceil() as usize;
-    println!("{} {}", len, sq);
-    
-    let diff = (sq*sq)-len;
-    let filler : String = ['_'].iter().cycle().take(diff).collect();
-    normalized.push_str(&filler);
-    
+    let rows = (normalized.len() as f64).sqrt().ceil() as usize;
+    let cols = (normalized.len() as f64).sqrt().floor() as usize;
 
-    let coded : String = normalized.chars().cycle().enumerate().filter(|(i,_c)| ((i - (i / (sq*sq))) % sq) == 0).take(len).map(|(_i,c)| c).collect();
-    coded
+    let mut out: Vec<String> = Vec::with_capacity(rows);
+    for i in 0..rows {
+        let mut s = String::new();
+        for j in 0..cols {
+            if rows * j + i < normalized.len() {
+                s.push(normalized[rows * j + i])
+            } else {
+                s.push(' ');
+            }
+        }
+        out.push(s);
+    }
+
+    for s in out.iter_mut().take(rows - 1) {
+        s.push(' ');
+    }
+
+    let mut code: String = String::new();
+    for s in &out {
+        code.push_str(&s);
+    }
+    code
 }
-
