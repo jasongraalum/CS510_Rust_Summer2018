@@ -1,5 +1,11 @@
-//Copyright (c) 2018 Jason Graalum
-//
+///Copyright (c) 2018 Jason Graalum
+///
+/// CS510 Rust Programming
+/// Summer 2018
+///
+/// HW #3
+///
+
 // Enum for WordProblem state machine
 enum Op {
     Start,
